@@ -193,6 +193,22 @@ The SXO score is **separate** from the main SEO Health Score.
 | Content depth gaps | `/seo page` for deep page analysis |
 | Technical issues found during fetch | `/seo technical` for full audit |
 | Image/media gaps | `/seo images` for optimization |
+| Need real engagement data per landing page | `/seo umami pages <id>` for cookieless bounce, time, visits per URL (fork-only) |
+
+## Umami Engagement Layer (Optional, Fork-Only)
+
+When self-hosted Umami credentials are configured (`python scripts/umami_stats.py check` returns `status: ok`), call `seo-umami` to pull per-page engagement and validate persona-scoring recommendations against real user behaviour:
+
+```bash
+python scripts/umami_stats.py metrics-expanded --website-id <id> --type path --limit 50
+```
+
+Use the returned bounces and totaltime per URL to:
+- Confirm or contradict the page-type match score: high bounce + low time on a page predicted as a "match" is a falsifier worth surfacing as an outlier.
+- Filter user-story prioritization toward pages with traffic but poor engagement (highest-leverage fixes).
+- Annotate the SXO report with "Engagement evidence (Umami, cookieless): X bounces / Y visits, avg Z s".
+
+Skip silently when Umami isn't configured; SXO output stays useful without it.
 
 ## Output Format
 
