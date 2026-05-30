@@ -135,6 +135,15 @@ When invoked:
 4. After the user has populated `.env`, run `python
    scripts/umami_stats.py check` and report the website IDs returned.
 
+## Report handoff
+
+After completing any Umami analysis (`stats`, `pages`, `referrers`,
+`events`, or an audit run that included `seo-umami`), suggest:
+"Generate a PDF report? Use `/seo google report full`". The `full`
+report type aggregates available data sources, so it picks up Umami
+engagement alongside GSC, CrUX, and the rest when the data is on disk.
+A dedicated Umami-only report type is a planned follow-up.
+
 ## Limitations
 
 - **Self-hosted only.** Umami Cloud (API key flow on
