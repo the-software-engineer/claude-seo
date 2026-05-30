@@ -185,6 +185,22 @@ Per Google's AI optimization guide, "AEO" and "GEO" are rebranded labels for SEO
 
 If DataForSEO MCP tools are available, use `kw_data_google_ads_search_volume` for real keyword volume data, `dataforseo_labs_bulk_keyword_difficulty` for difficulty scores, `dataforseo_labs_search_intent` for intent classification, and `content_analysis_summary` for content quality analysis.
 
+## Umami Engagement Layer (Optional, Fork-Only)
+
+When self-hosted Umami credentials are configured (`python scripts/umami_stats.py check` returns `status: ok`), pull per-page engagement to attach behavioural evidence to content-quality findings:
+
+```bash
+python scripts/umami_stats.py metrics-expanded --website-id <id> --type path --limit 50
+python scripts/umami_stats.py metrics --website-id <id> --type referrer --limit 30
+```
+
+Use the data to:
+- Flag pages with high bounce + low totaltime as "intent satisfaction risk" candidates, regardless of E-E-A-T score, and pair the recommendation with the specific Umami numbers as falsifiable evidence.
+- Prioritize thin-content rewrites toward pages that already receive traffic (per `metrics --type path`), rather than zero-traffic backlog pages.
+- Note dominant referrer mix per page (search vs direct vs social) so content recommendations match how visitors actually arrive.
+
+Skip silently when Umami isn't configured; content findings stay useful without it.
+
 ## Error Handling
 
 | Scenario | Action |

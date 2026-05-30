@@ -66,11 +66,12 @@ When the user invokes `/seo audit`, delegate to subagents in parallel:
 8. If content strategy signals detected (blog, pillar pages, topic clusters), also spawn seo-cluster agent
 9. If e-commerce detected, also spawn seo-ecommerce agent
 10. If drift baseline exists for this URL (`python scripts/drift_history.py <url>`), also spawn seo-drift agent
-11. Always include seo-sxo in full audits (search experience applies to all sites)
-12. Collect results and generate unified report with SEO Health Score (0-100)
-13. **Synthesize via the 10-principle framework** (see "Synthesis Methodology" below) — walk PERCEIVE → ANALYZE → VALIDATE → ACT before bucketing findings into Critical / High / Medium / Low
-14. Create prioritized action plan with dependency sequencing + falsifiability per recommendation
-15. **Offer PDF report**: "Generate a professional PDF report? Use `/seo google report full`"
+11. If Umami credentials detected (`python scripts/umami_stats.py check` returns `status: ok`), also spawn seo-umami agent for cookieless on-site engagement data (per-page bounce, time, referrers). Fork-only.
+12. Always include seo-sxo in full audits (search experience applies to all sites)
+13. Collect results and generate unified report with SEO Health Score (0-100)
+14. **Synthesize via the 10-principle framework** (see "Synthesis Methodology" below) — walk PERCEIVE → ANALYZE → VALIDATE → ACT before bucketing findings into Critical / High / Medium / Low
+15. Create prioritized action plan with dependency sequencing + falsifiability per recommendation
+16. **Offer PDF report**: "Generate a professional PDF report? Use `/seo google report full`"
 
 For individual commands, load the relevant sub-skill directly.
 After any analysis command completes, offer to generate a PDF report via `scripts/google_report.py`.
@@ -250,6 +251,7 @@ For parallel analysis during audits:
 - `seo-backlinks` -- Backlink profile data: DA/PA, referring domains, anchor text, toxic links (conditional: spawned when Moz/Bing API keys detected or always for CC domain-level metrics)
 - `seo-cluster` -- Semantic clustering analysis (conditional: content strategy detected)
 - `seo-sxo` -- Page-type mismatch, user stories, persona scoring (always in full audits)
+- `seo-umami` -- Self-hosted Umami: cookieless on-site engagement (per-page bounce, time on page, referrers, events). Feeds SXO and content validation (conditional: spawned when Umami credentials configured). Fork-only.
 - `seo-drift` -- Baseline comparison (conditional: drift baseline exists for URL)
 - `seo-ecommerce` -- Product schema, marketplace intel (conditional: e-commerce detected)
 - `seo-flow` -- FLOW framework prompts (conditional: spawned for content strategy workflows)
