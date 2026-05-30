@@ -116,7 +116,7 @@ data.
 
 When invoked:
 
-1. Read `~/Users/theo/tse/claude-seo/.env.example` and explain the four
+1. Read `.env.example` at the repository root and explain the four
    variables.
 2. Check whether `.env` already exists; if it does, confirm with the
    user before overwriting.

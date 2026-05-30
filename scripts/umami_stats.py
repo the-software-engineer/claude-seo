@@ -85,11 +85,15 @@ def login(base_url: str, username: str, password: str) -> str:
     )
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read())
+            body = resp.read()
+        data = json.loads(body)
     except urllib.error.HTTPError as e:
         raise UmamiError(f"login failed: HTTP {e.code} {e.reason}") from e
     except urllib.error.URLError as e:
         raise UmamiError(f"login failed: {e.reason}") from e
+    except json.JSONDecodeError as e:
+        snippet = body[:200].decode("utf-8", "replace") if isinstance(body, bytes) else ""
+        raise UmamiError(f"login failed: non-JSON response ({e}); body starts: {snippet!r}") from e
     token = data.get("token")
     if not token:
         raise UmamiError("login response missing token")
@@ -103,11 +107,15 @@ def _get(base_url: str, token: str, path: str):
     )
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read())
+            body = resp.read()
+        return json.loads(body)
     except urllib.error.HTTPError as e:
         raise UmamiError(f"GET {path} -> HTTP {e.code} {e.reason}") from e
     except urllib.error.URLError as e:
         raise UmamiError(f"GET {path} -> {e.reason}") from e
+    except json.JSONDecodeError as e:
+        snippet = body[:200].decode("utf-8", "replace") if isinstance(body, bytes) else ""
+        raise UmamiError(f"GET {path} -> non-JSON response ({e}); body starts: {snippet!r}") from e
 
 
 def _ms_range(days: int):

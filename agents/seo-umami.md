@@ -23,7 +23,7 @@ When spawned by `seo-audit`:
 
 - `python scripts/umami_stats.py stats --website-id <id>` -- headline
   numbers.
-- `python scripts/umami_stats.py metrics-expanded --website-id <id> --type url --limit 50`
+- `python scripts/umami_stats.py metrics-expanded --website-id <id> --type path --limit 50`
   -- per-page engagement (the SXO / content layer).
 - `python scripts/umami_stats.py metrics --website-id <id> --type referrer --limit 30`
   -- traffic-source mix (channel breakdown).
