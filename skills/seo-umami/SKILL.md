@@ -27,15 +27,24 @@ ship it. See the fork-rationale note in the repo README.
 
 ## Prerequisites
 
-Set `UMAMI_USERNAME` and `UMAMI_PASSWORD` in the environment, or in a
-`.env` file at the repo root. Optional: `UMAMI_BASE_URL` (default
-`https://analytics.crafts.software`), `UMAMI_WEBSITE_ID` (default for
-`--website-id`).
+Set `UMAMI_USERNAME` and `UMAMI_PASSWORD`. The script looks for them
+in three places, in order. The first match wins per variable; shell
+env vars override everything.
+
+1. `$UMAMI_ENV_FILE` if set (explicit override).
+2. `~/.config/claude-seo/umami.env` -- **recommended post-install**.
+   Cwd-independent, so `/seo umami` works from any Claude session,
+   including when invoked through the installed plugin cache.
+3. `.env` at this repo's root (dev convenience when running from a
+   checkout).
+
+Optional: `UMAMI_BASE_URL` (default `https://analytics.crafts.software`),
+`UMAMI_WEBSITE_ID` (default for `--website-id`).
 
 Credentials follow the Foundry service-credentials standard. Source of
-truth: 1Password TSE vault, item `Umami`. The `.env` is a gitignored
-consumer copy. See `.env.example` at the repo root and
-`tse/the-foundry/standards/service-credentials.md`.
+truth: 1Password TSE vault, item `Umami`. The file at any of the three
+locations is a gitignored consumer copy. See `.env.example` at the repo
+root and `tse/the-foundry/standards/service-credentials.md`.
 
 To verify setup:
 

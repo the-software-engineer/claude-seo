@@ -65,8 +65,33 @@ def _repo_root() -> str:
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def _candidate_env_files():
+    """Ordered list of .env-style files the loader will read.
+
+    Shell env vars always win (see _load_dotenv: existing vars are not
+    overridden). Among files, the earlier file wins per variable.
+
+    Order:
+    1. $UMAMI_ENV_FILE if set (explicit operator override).
+    2. ~/.config/claude-seo/umami.env (per-user, install-friendly; this
+       is the recommended location post-install so the script works
+       regardless of cwd, including when invoked from the installed
+       plugin cache at ~/.claude/plugins/cache/.../scripts/).
+    3. Repo-local .env at the repo root (dev convenience when running
+       from a checkout).
+    """
+    paths = []
+    explicit = os.environ.get("UMAMI_ENV_FILE")
+    if explicit:
+        paths.append(os.path.expanduser(explicit))
+    paths.append(os.path.expanduser("~/.config/claude-seo/umami.env"))
+    paths.append(os.path.join(_repo_root(), ".env"))
+    return paths
+
+
 def _config() -> dict:
-    _load_dotenv(os.path.join(_repo_root(), ".env"))
+    for path in _candidate_env_files():
+        _load_dotenv(path)
     return {
         "base_url": os.environ.get("UMAMI_BASE_URL", DEFAULT_BASE_URL).rstrip("/"),
         "username": os.environ.get("UMAMI_USERNAME"),
